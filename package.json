@@ -2,13 +2,13 @@
   "name": "wfrp-name-generator",
   "version": "1.0.0",
   "description": "Creates random names for Humans in the Warhammer Fantasy universe.",
-  "main": "index.js",
   "scripts": {
     "dev": "next",
     "build": "next build",
     "start": "next start",
     "lint": "eslint . ",
-    "lint:fix": "eslint . --fix"
+    "lint:fix": "eslint . --fix",
+    "export": "npm run build && next export"
   },
   "keywords": [
     "wfrp",
