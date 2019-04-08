@@ -131,6 +131,7 @@ export default class Index extends React.Component {
               rgba(47, 2, 2, 1) 0%,
               rgba(3, 3, 3, 1) 100%
             );
+            touch-action: manipulation;
           }
         `}</style>
         <Grid textAlign="center">
