@@ -117,6 +117,10 @@ export default class Index extends React.Component {
     return (
       <Container text>
         <Head>
+          <meta
+            name="viewport"
+            content="width=device-width, height=device-height, initial-scale=1"
+          />
           <title>Warhammer Fantasy Name Generator</title>
           <link
             rel="stylesheet"
@@ -131,6 +135,7 @@ export default class Index extends React.Component {
               rgba(47, 2, 2, 1) 0%,
               rgba(3, 3, 3, 1) 100%
             );
+            overflow: hidden;
             touch-action: manipulation;
           }
         `}</style>
