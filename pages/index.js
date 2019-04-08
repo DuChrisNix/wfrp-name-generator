@@ -140,7 +140,7 @@ export default class Index extends React.Component {
               <Header
                 as="h1"
                 content="WFRP Name Generator"
-                style={{ color: 'white', marginTop: '2rem' }}
+                style={{ color: 'white', marginTop: '2rem', marginBottom: 0 }}
               />
               <Header
                 size="tiny"
@@ -199,18 +199,18 @@ export default class Index extends React.Component {
               </Button.Group>
             </Grid.Column>
           </Grid.Row>
+          <Grid.Row style={{ minHeight: '65px' }}>
+            <Grid.Column>
+              <Header size="huge" style={{ color: 'white' }}>
+                {generatedName}
+              </Header>
+            </Grid.Column>
+          </Grid.Row>
           <Grid.Row>
             <Grid.Column>
               <Button onClick={this.handleGenerateClick} color="orange">
                 {this.buttonText()}
               </Button>
-            </Grid.Column>
-          </Grid.Row>
-          <Grid.Row>
-            <Grid.Column>
-              <Header size="huge" style={{ color: 'white' }}>
-                {generatedName}
-              </Header>
             </Grid.Column>
           </Grid.Row>
         </Grid>
