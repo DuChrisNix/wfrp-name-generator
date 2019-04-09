@@ -1,4 +1,4 @@
-const verben = [
+const verbs = [
   'alte',
   'ängstliche',
   'arglose',
@@ -131,7 +131,6 @@ const derWords = [
   'Kapitän',
   'Kesselflicker',
   'Ketzer',
-  'Knackschnabel',
   'Krieger',
   'Nachtwächter',
   'Mann',
@@ -161,15 +160,6 @@ const derWords = [
   'Zwerg',
 ];
 
-const dasWords = [
-  'Hufeisen',
-  'Pferd',
-  'Ross',
-  'Schild',
-  'Wiesel',
-  'Wildschwein',
-];
-
 const dieWords = [
   'Gräfin',
   'Fledermaus',
@@ -181,50 +171,80 @@ const dieWords = [
   'Ziege',
 ];
 
+const dasWords = [
+  'Hufeisen',
+  'Pferd',
+  'Ross',
+  'Schild',
+  'Wiesel',
+  'Wildschwein',
+];
+
+const DER_LENGTH = derWords.length;
+const DIE_LENGTH = dieWords.length;
+const DAS_LENGTH = dasWords.length;
+const DER_DIE_LENGTH = DER_LENGTH + DIE_LENGTH;
+const DER_DIE_DAS_LENGTH = DER_DIE_LENGTH + DAS_LENGTH;
+
 const getRandomInt = max => Math.floor(Math.random() * Math.floor(max));
 
-const der = () => {
-  const verb = verben[Math.floor(Math.random() * verben.length)];
-  const name = derWords[getRandomInt(derWords.length)];
-  const taverne = `Der ${verb} ${name}`;
+const weightNumbers = () => {
+  const allWordsRandom = getRandomInt(DER_DIE_DAS_LENGTH);
 
-  return taverne;
-};
+  if (allWordsRandom >= 0 && allWordsRandom < DER_LENGTH) {
+    return getRandomInt(2) ? 0 : 3;
+  }
 
-const die = () => {
-  const verb = verben[Math.floor(Math.random() * verben.length)];
-  const name = dieWords[getRandomInt(dieWords.length)];
-  const taverne = `Die ${verb} ${name}`;
+  if (allWordsRandom >= DER_LENGTH && allWordsRandom < DER_DIE_LENGTH) {
+    return getRandomInt(2) ? 1 : 4;
+  }
 
-  return taverne;
-};
-
-const das = () => {
-  const verb = verben[Math.floor(Math.random() * verben.length)];
-  const name = dasWords[getRandomInt(dasWords.length)];
-  const taverne = `Das ${verb} ${name}`;
-
-  return taverne;
-};
-
-const zum = () => {
-  const verb = verben[Math.floor(Math.random() * verben.length)];
-  const name = derWords[getRandomInt(derWords.length)];
-  const taverne = `Zum ${verb}n ${name}`;
-
-  return taverne;
-};
-
-const zur = () => {
-  const verb = verben[Math.floor(Math.random() * verben.length)];
-  const name = dieWords[getRandomInt(dieWords.length)];
-  const taverne = `Zur ${verb}n ${name}`;
-
-  return taverne;
+  if (allWordsRandom >= DER_DIE_LENGTH && allWordsRandom < DER_DIE_DAS_LENGTH) {
+    return getRandomInt(2) ? 2 : 5;
+  }
 };
 
 export const generateTavernName = () => {
-  const possibilities = [der(), die(), das(), zum(), zur()];
+  const verbsRandom = getRandomInt(verbs.length);
+  const derWordsRandom = getRandomInt(derWords.length);
+  const dieWordsRandom = getRandomInt(dieWords.length);
+  const dasWordsRandom = getRandomInt(dasWords.length);
 
-  return possibilities[getRandomInt(possibilities.length)];
+  const verb = verbs[verbsRandom];
+  const phraseRandom = weightNumbers();
+
+  let name;
+  let tavern;
+
+  if (phraseRandom === 0) {
+    name = derWords[derWordsRandom];
+    tavern = `Der ${verb} ${name}`;
+  }
+
+  if (phraseRandom === 1) {
+    name = dieWords[dieWordsRandom];
+    tavern = `Die ${verb} ${name}`;
+  }
+
+  if (phraseRandom === 2) {
+    name = dasWords[dasWordsRandom];
+    tavern = `Das ${verb} ${name}`;
+  }
+
+  if (phraseRandom === 3) {
+    name = derWords[derWordsRandom];
+    tavern = `Zum ${verb}n ${name}`;
+  }
+
+  if (phraseRandom === 4) {
+    name = dieWords[dieWordsRandom];
+    tavern = `Zur ${verb}n ${name}`;
+  }
+
+  if (phraseRandom === 5) {
+    name = dasWords[dasWordsRandom];
+    tavern = `Zum ${verb}n ${name}`;
+  }
+
+  return tavern;
 };
