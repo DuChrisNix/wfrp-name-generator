@@ -3,12 +3,14 @@ import Head from 'next/head';
 import { Button, Container, Grid, Header } from 'semantic-ui-react';
 
 import Names from '../data/names.json';
+import { generateTavernName } from '../data/tavernNames';
 
 export default class Index extends React.Component {
   state = {
     genderSelection: 'female',
     generatedName: undefined,
     raceSelection: 'dwarf',
+    selectedMode: 'npc',
   };
 
   getRandomInt = max => Math.floor(Math.random() * Math.floor(max));
@@ -75,25 +77,31 @@ export default class Index extends React.Component {
   };
 
   handleGenerateClick = () => {
-    const { genderSelection, raceSelection } = this.state;
+    const { genderSelection, raceSelection, selectedMode } = this.state;
 
     let generatedName;
 
-    switch (raceSelection) {
-      case 'dwarf':
-        generatedName = this.generateDwarfName(genderSelection);
-        break;
-      case 'elf':
-        generatedName = this.generateElfName();
-        break;
-      case 'halfling':
-        generatedName = this.generateHalflingName(genderSelection);
-        break;
-      case 'human':
-        generatedName = this.generateHumanName(genderSelection);
-        break;
-      default:
-        break;
+    if (selectedMode === 'npc') {
+      switch (raceSelection) {
+        case 'dwarf':
+          generatedName = this.generateDwarfName(genderSelection);
+          break;
+        case 'elf':
+          generatedName = this.generateElfName();
+          break;
+        case 'halfling':
+          generatedName = this.generateHalflingName(genderSelection);
+          break;
+        case 'human':
+          generatedName = this.generateHumanName(genderSelection);
+          break;
+        default:
+          break;
+      }
+    }
+
+    if (selectedMode === 'tavern') {
+      generatedName = generateTavernName();
     }
 
     this.setState({
@@ -102,17 +110,28 @@ export default class Index extends React.Component {
   };
 
   buttonText = () => {
-    const { genderSelection, raceSelection } = this.state;
+    const { genderSelection, raceSelection, selectedMode } = this.state;
 
-    if (raceSelection === 'elf') {
-      return `Generate an ${raceSelection} name`;
+    if (selectedMode === 'npc') {
+      if (raceSelection === 'elf') {
+        return `Generate an ${raceSelection} name`;
+      }
+
+      return `Generate a ${genderSelection} ${raceSelection} name`;
     }
 
-    return `Generate a ${genderSelection} ${raceSelection} name`;
+    if (selectedMode === 'tavern') {
+      return 'Generate a tavern name';
+    }
   };
 
   render() {
-    const { generatedName, genderSelection, raceSelection } = this.state;
+    const {
+      generatedName,
+      genderSelection,
+      raceSelection,
+      selectedMode,
+    } = this.state;
 
     return (
       <Container text>
@@ -158,52 +177,78 @@ export default class Index extends React.Component {
             <Grid.Column>
               <Button.Group>
                 <Button
-                  active={raceSelection === 'dwarf'}
-                  onClick={() => this.setState({ raceSelection: 'dwarf' })}
+                  active={selectedMode === 'npc'}
+                  onClick={() => this.setState({ selectedMode: 'npc' })}
                 >
-                  Dwarf
+                  NPC Names
                 </Button>
                 <Button
-                  active={raceSelection === 'elf'}
-                  onClick={() => this.setState({ raceSelection: 'elf' })}
+                  active={selectedMode === 'tavern'}
+                  onClick={() => this.setState({ selectedMode: 'tavern' })}
                 >
-                  Elf
-                </Button>
-                <Button
-                  active={raceSelection === 'halfling'}
-                  onClick={() => this.setState({ raceSelection: 'halfling' })}
-                >
-                  Halfling
-                </Button>
-                <Button
-                  active={raceSelection === 'human'}
-                  onClick={() => this.setState({ raceSelection: 'human' })}
-                >
-                  Human
+                  Tavern Names
                 </Button>
               </Button.Group>
             </Grid.Column>
           </Grid.Row>
-          <Grid.Row>
-            <Grid.Column>
-              <Button.Group>
-                <Button
-                  active={genderSelection === 'female'}
-                  disabled={raceSelection === 'elf'}
-                  onClick={() => this.setState({ genderSelection: 'female' })}
-                >
-                  Female
-                </Button>
-                <Button
-                  active={genderSelection === 'male'}
-                  disabled={raceSelection === 'elf'}
-                  onClick={() => this.setState({ genderSelection: 'male' })}
-                >
-                  Male
-                </Button>
-              </Button.Group>
-            </Grid.Column>
-          </Grid.Row>
+          {selectedMode === 'npc' && (
+            <>
+              <Grid.Row>
+                <Grid.Column>
+                  <Button.Group>
+                    <Button
+                      active={raceSelection === 'dwarf'}
+                      onClick={() => this.setState({ raceSelection: 'dwarf' })}
+                    >
+                      Dwarf
+                    </Button>
+                    <Button
+                      active={raceSelection === 'elf'}
+                      onClick={() => this.setState({ raceSelection: 'elf' })}
+                    >
+                      Elf
+                    </Button>
+                    <Button
+                      active={raceSelection === 'halfling'}
+                      onClick={() =>
+                        this.setState({ raceSelection: 'halfling' })
+                      }
+                    >
+                      Halfling
+                    </Button>
+                    <Button
+                      active={raceSelection === 'human'}
+                      onClick={() => this.setState({ raceSelection: 'human' })}
+                    >
+                      Human
+                    </Button>
+                  </Button.Group>
+                </Grid.Column>
+              </Grid.Row>
+              <Grid.Row>
+                <Grid.Column>
+                  <Button.Group>
+                    <Button
+                      active={genderSelection === 'female'}
+                      disabled={raceSelection === 'elf'}
+                      onClick={() =>
+                        this.setState({ genderSelection: 'female' })
+                      }
+                    >
+                      Female
+                    </Button>
+                    <Button
+                      active={genderSelection === 'male'}
+                      disabled={raceSelection === 'elf'}
+                      onClick={() => this.setState({ genderSelection: 'male' })}
+                    >
+                      Male
+                    </Button>
+                  </Button.Group>
+                </Grid.Column>
+              </Grid.Row>
+            </>
+          )}
           <Grid.Row style={{ minHeight: '65px' }}>
             <Grid.Column>
               <Header size="huge" style={{ color: 'white' }}>
