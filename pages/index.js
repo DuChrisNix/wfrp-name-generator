@@ -8,7 +8,7 @@ import { generateTavernName } from '../data/tavernNames';
 export default class Index extends React.Component {
   state = {
     genderSelection: 'female',
-    generatedName: undefined,
+    generatedNames: [],
     raceSelection: 'dwarf',
     selectedMode: 'npc',
   };
@@ -79,33 +79,50 @@ export default class Index extends React.Component {
   handleGenerateClick = () => {
     const { genderSelection, raceSelection, selectedMode } = this.state;
 
-    let generatedName;
+    const generatedNames = [];
+    const windowHeight = window.innerHeight;
+    const rem = parseFloat(getComputedStyle(document.documentElement).fontSize);
+    const nameHeight = 2 * rem + rem * 0.3;
 
-    if (selectedMode === 'npc') {
-      switch (raceSelection) {
-        case 'dwarf':
-          generatedName = this.generateDwarfName(genderSelection);
-          break;
-        case 'elf':
-          generatedName = this.generateElfName();
-          break;
-        case 'halfling':
-          generatedName = this.generateHalflingName(genderSelection);
-          break;
-        case 'human':
-          generatedName = this.generateHumanName(genderSelection);
-          break;
-        default:
-          break;
+    const spaceForNamesInRem =
+      selectedMode === 'tavern'
+        ? windowHeight - 21 * rem
+        : windowHeight - 27.5 * rem;
+
+    let possibleNames = Math.floor(spaceForNamesInRem / nameHeight);
+    possibleNames = possibleNames > 10 ? 10 : possibleNames;
+
+    for (let index = 0; index < possibleNames; index += 1) {
+      let generatedName;
+
+      if (selectedMode === 'npc') {
+        switch (raceSelection) {
+          case 'dwarf':
+            generatedName = this.generateDwarfName(genderSelection);
+            break;
+          case 'elf':
+            generatedName = this.generateElfName();
+            break;
+          case 'halfling':
+            generatedName = this.generateHalflingName(genderSelection);
+            break;
+          case 'human':
+            generatedName = this.generateHumanName(genderSelection);
+            break;
+          default:
+            break;
+        }
       }
-    }
 
-    if (selectedMode === 'tavern') {
-      generatedName = generateTavernName();
+      if (selectedMode === 'tavern') {
+        generatedName = generateTavernName();
+      }
+
+      generatedNames.push(generatedName);
     }
 
     this.setState({
-      generatedName,
+      generatedNames,
     });
   };
 
@@ -127,8 +144,8 @@ export default class Index extends React.Component {
 
   render() {
     const {
-      generatedName,
       genderSelection,
+      generatedNames,
       raceSelection,
       selectedMode,
     } = this.state;
@@ -173,18 +190,33 @@ export default class Index extends React.Component {
               />
             </Grid.Column>
           </Grid.Row>
-          <Grid.Row>
+          <Grid.Row
+            style={{
+              paddingTop: 0,
+              paddingBottom: '.75rem',
+            }}
+          >
             <Grid.Column>
               <Button.Group>
                 <Button
                   active={selectedMode === 'npc'}
-                  onClick={() => this.setState({ selectedMode: 'npc' })}
+                  onClick={() =>
+                    this.setState({
+                      selectedMode: 'npc',
+                      generatedNames: [],
+                    })
+                  }
                 >
                   NPC Names
                 </Button>
                 <Button
                   active={selectedMode === 'tavern'}
-                  onClick={() => this.setState({ selectedMode: 'tavern' })}
+                  onClick={() =>
+                    this.setState({
+                      selectedMode: 'tavern',
+                      generatedNames: [],
+                    })
+                  }
                 >
                   Tavern Names
                 </Button>
@@ -193,46 +225,77 @@ export default class Index extends React.Component {
           </Grid.Row>
           {selectedMode === 'npc' && (
             <>
-              <Grid.Row>
+              <Grid.Row
+                style={{
+                  paddingTop: 0,
+                  paddingBottom: '.75rem',
+                }}
+              >
                 <Grid.Column>
                   <Button.Group>
                     <Button
                       active={raceSelection === 'dwarf'}
-                      onClick={() => this.setState({ raceSelection: 'dwarf' })}
+                      onClick={() =>
+                        this.setState({
+                          raceSelection: 'dwarf',
+                          generatedNames: [],
+                        })
+                      }
                     >
                       Dwarf
                     </Button>
                     <Button
                       active={raceSelection === 'elf'}
-                      onClick={() => this.setState({ raceSelection: 'elf' })}
+                      onClick={() =>
+                        this.setState({
+                          raceSelection: 'elf',
+                          generatedNames: [],
+                        })
+                      }
                     >
                       Elf
                     </Button>
                     <Button
                       active={raceSelection === 'halfling'}
                       onClick={() =>
-                        this.setState({ raceSelection: 'halfling' })
+                        this.setState({
+                          raceSelection: 'halfling',
+                          generatedNames: [],
+                        })
                       }
                     >
                       Halfling
                     </Button>
                     <Button
                       active={raceSelection === 'human'}
-                      onClick={() => this.setState({ raceSelection: 'human' })}
+                      onClick={() =>
+                        this.setState({
+                          raceSelection: 'human',
+                          generatedNames: [],
+                        })
+                      }
                     >
                       Human
                     </Button>
                   </Button.Group>
                 </Grid.Column>
               </Grid.Row>
-              <Grid.Row>
+              <Grid.Row
+                style={{
+                  paddingTop: 0,
+                  paddingBottom: '.75rem',
+                }}
+              >
                 <Grid.Column>
                   <Button.Group>
                     <Button
                       active={genderSelection === 'female'}
                       disabled={raceSelection === 'elf'}
                       onClick={() =>
-                        this.setState({ genderSelection: 'female' })
+                        this.setState({
+                          genderSelection: 'female',
+                          generatedNames: [],
+                        })
                       }
                     >
                       Female
@@ -240,7 +303,12 @@ export default class Index extends React.Component {
                     <Button
                       active={genderSelection === 'male'}
                       disabled={raceSelection === 'elf'}
-                      onClick={() => this.setState({ genderSelection: 'male' })}
+                      onClick={() =>
+                        this.setState({
+                          genderSelection: 'male',
+                          generatedNames: [],
+                        })
+                      }
                     >
                       Male
                     </Button>
@@ -249,14 +317,28 @@ export default class Index extends React.Component {
               </Grid.Row>
             </>
           )}
-          <Grid.Row style={{ minHeight: '65px' }}>
+          <Grid.Row style={{ paddingTop: 0, marginTop: '1rem' }}>
             <Grid.Column>
-              <Header size="huge" style={{ color: 'white' }}>
-                {generatedName}
-              </Header>
+              {generatedNames.map((generatedName, index) => (
+                <p
+                  style={{
+                    color: 'white',
+                    fontSize: '1.5rem',
+                    marginBottom: '.3rem',
+                  }}
+                  key={`generated-name-${index}`}
+                >
+                  {generatedName}
+                </p>
+              ))}
             </Grid.Column>
           </Grid.Row>
-          <Grid.Row>
+          <Grid.Row
+            style={{
+              position: 'absolute',
+              bottom: '2rem',
+            }}
+          >
             <Grid.Column>
               <Button onClick={this.handleGenerateClick} color="orange">
                 {this.buttonText()}
