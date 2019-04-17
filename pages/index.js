@@ -280,41 +280,41 @@ export default class Index extends React.Component {
                   </Button.Group>
                 </Grid.Column>
               </Grid.Row>
-              <Grid.Row
-                style={{
-                  paddingTop: 0,
-                  paddingBottom: '.75rem',
-                }}
-              >
-                <Grid.Column>
-                  <Button.Group>
-                    <Button
-                      active={genderSelection === 'female'}
-                      disabled={raceSelection === 'elf'}
-                      onClick={() =>
-                        this.setState({
-                          genderSelection: 'female',
-                          generatedNames: [],
-                        })
-                      }
-                    >
-                      Female
-                    </Button>
-                    <Button
-                      active={genderSelection === 'male'}
-                      disabled={raceSelection === 'elf'}
-                      onClick={() =>
-                        this.setState({
-                          genderSelection: 'male',
-                          generatedNames: [],
-                        })
-                      }
-                    >
-                      Male
-                    </Button>
-                  </Button.Group>
-                </Grid.Column>
-              </Grid.Row>
+              {raceSelection !== 'elf' && (
+                <Grid.Row
+                  style={{
+                    paddingTop: 0,
+                    paddingBottom: '.75rem',
+                  }}
+                >
+                  <Grid.Column>
+                    <Button.Group>
+                      <Button
+                        active={genderSelection === 'female'}
+                        onClick={() =>
+                          this.setState({
+                            genderSelection: 'female',
+                            generatedNames: [],
+                          })
+                        }
+                      >
+                        Female
+                      </Button>
+                      <Button
+                        active={genderSelection === 'male'}
+                        onClick={() =>
+                          this.setState({
+                            genderSelection: 'male',
+                            generatedNames: [],
+                          })
+                        }
+                      >
+                        Male
+                      </Button>
+                    </Button.Group>
+                  </Grid.Column>
+                </Grid.Row>
+              )}
             </>
           )}
           <Grid.Row style={{ paddingTop: 0, marginTop: '1rem' }}>

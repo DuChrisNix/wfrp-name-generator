@@ -30,7 +30,7 @@ const verbs = [
   'furchtlose',
   'furchtsame',
   'furzende',
-  'geschlatete',
+  'geschlachtete',
   'gerissene',
   'gesellige',
   'gewitzte',
@@ -158,6 +158,7 @@ const derWords = [
   'Wolf',
   'Zimmermann',
   'Zwerg',
+  'Zeisig',
 ];
 
 const dieWords = [
